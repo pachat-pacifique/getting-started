@@ -1,0 +1,35 @@
+services:
+  app:
+    image: node:18-alpine
+    command: ["tail", "-f", "/dev/null"] 
+    ports:
+      - "3000:3000"
+    working_dir: /app
+    volumes:
+      - ./:/app
+    # Comment out the environment section as required
+    # environment:
+    #   MYSQL_HOST: mysql
+    #   MYSQL_USER: root
+    #   MYSQL_PASSWORD: secret
+    #   MYSQL_DB: todos
+    networks:
+      - my_custom_network
+
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - todo-mysql-data:/var/lib/mysql
+    environment: 
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: todos
+    hostname: mysql
+    networks:
+      - my_custom_network
+
+volumes:
+  todo-mysql-data:
+
+networks:
+  my_custom_network:
+    driver: bridge
